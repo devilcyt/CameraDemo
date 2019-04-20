@@ -1,0 +1,6 @@
+<resources>
+    <string name="app_name">CameraDemo</string>
+
+    <string name="prop_enable">enable</string>
+    <string name="prop_disable">disable</string>
+</resources>
