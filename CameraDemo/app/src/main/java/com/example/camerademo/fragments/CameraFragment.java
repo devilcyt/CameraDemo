@@ -42,16 +42,15 @@ import android.view.Surface;
 import android.view.TextureView;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.camerademo.AutoFitTextureView;
 import com.example.camerademo.R;
 import com.example.camerademo.utils.LogUtil;
-import com.example.camerademo.utils.SystemPropertiesProxy;
 import com.example.camerademo.utils.SystemPropertiesProxy2;
 
+import android.os.SystemProperties;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -112,13 +111,13 @@ public class CameraFragment extends Fragment implements View.OnClickListener,
         @Override
         public void onSurfaceTextureSizeChanged(SurfaceTexture surface, int width, int height) {
             // do config action
-            LogUtil.d("onSurfaceTextureSizeChanged");
+            LogUtil.i("onSurfaceTextureSizeChanged");
             confiurerTansform(width, height);
         }
 
         @Override
         public boolean onSurfaceTextureDestroyed(SurfaceTexture surface) {
-            LogUtil.d("onSurfaceTextureDestroyed");
+            LogUtil.i("onSurfaceTextureDestroyed");
             return true;
         }
 
@@ -174,7 +173,7 @@ public class CameraFragment extends Fragment implements View.OnClickListener,
                     }
                 }
             }
-            LogUtil.d("保存图片流程结束");
+            LogUtil.i("保存图片流程结束");
         }
     }
 
@@ -198,7 +197,7 @@ public class CameraFragment extends Fragment implements View.OnClickListener,
         mStateCallBack = new CameraDevice.StateCallback() {
             @Override
             public void onOpened(CameraDevice camera) {
-                LogUtil.d("camera onOpened");
+                LogUtil.i("camera onOpened");
                 mCameraLock.release();
                 mCameraDevice = camera;
                 //创建预览
@@ -207,7 +206,7 @@ public class CameraFragment extends Fragment implements View.OnClickListener,
 
             @Override
             public void onDisconnected(CameraDevice camera) {
-                LogUtil.d("camera onDisconnected");
+                LogUtil.i("camera onDisconnected");
                 mCameraLock.release();
                 camera.close();
                 mCameraDevice = null;
@@ -215,7 +214,7 @@ public class CameraFragment extends Fragment implements View.OnClickListener,
 
             @Override
             public void onError(CameraDevice camera, int error) {
-                LogUtil.d("camera onError");
+                LogUtil.i("camera onError");
                 mCameraLock.release();
                 camera.close();
                 mCameraDevice = null;
@@ -316,16 +315,17 @@ public class CameraFragment extends Fragment implements View.OnClickListener,
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        rectifyButton = view.findViewById(R.id.prop_rectify);
+        rectifyButton = (TextView)view.findViewById(R.id.prop_rectify);
         rectifyButton.setOnClickListener(this);
         propertiesProxy2 = SystemPropertiesProxy2.newInstance();
-        if(propertiesProxy2.get(PROP_RECTIFY, "0").equals("3") ){
+        propertiesProxy2.set(PROP_RECTIFY, String.valueOf(0));
+        if(SystemProperties.getInt(PROP_RECTIFY, 3) == 3 ){
             rectifyButton.setText(R.string.prop_enable);
         }else{
             rectifyButton.setText(R.string.prop_disable);
         }
         view.findViewById(R.id.photo_btn).setOnClickListener(this);
-        mTextureView = view.findViewById(R.id.surface_view);
+        mTextureView = (AutoFitTextureView) view.findViewById(R.id.surface_view);
     }
 
     @Override
@@ -364,11 +364,11 @@ public class CameraFragment extends Fragment implements View.OnClickListener,
             if(option.getWidth() <= maxWidth && option.getHeight() <= maxHeight &&
                     option.getHeight() == option.getWidth() * h / w){
                 if(option.getWidth() >= textureViewWidth && option.getHeight() >= textureViewHeight){
-                    LogUtil.d("bigEnough ++");
+                    LogUtil.i("bigEnough ++");
                     bigEnough.add(option);
                 }else{
                     notBigEnough.add(option);
-                    LogUtil.d("notBigEnough ++");
+                    LogUtil.i("notBigEnough ++");
                 }
             }
         }
@@ -378,7 +378,7 @@ public class CameraFragment extends Fragment implements View.OnClickListener,
         }else if(notBigEnough.size() > 0){
             return Collections.max(notBigEnough, new CompareSizesByArea());
         }else {
-            LogUtil.d("找不到合适的预览 size");
+            LogUtil.i("找不到合适的预览 size");
             return sizes[0];
         }
 
@@ -394,7 +394,7 @@ public class CameraFragment extends Fragment implements View.OnClickListener,
 
                 //camera fps settings
                 fpsRnage = characteristics.get(CameraCharacteristics.CONTROL_AE_AVAILABLE_TARGET_FPS_RANGES);
-                LogUtil.d("FPS INFO : " + Arrays.toString(fpsRnage));
+                LogUtil.i("FPS INFO : " + Arrays.toString(fpsRnage) + SystemProperties.getInt(PROP_RECTIFY,3));
 
                 Integer facing = characteristics.get(CameraCharacteristics.LENS_FACING);
                 if(facing != null && facing == CameraCharacteristics.LENS_FACING_FRONT){
@@ -432,7 +432,7 @@ public class CameraFragment extends Fragment implements View.OnClickListener,
                         }
                         break;
                     default:
-                        LogUtil.d("invalid display rotation : " + displayRotation);
+                        LogUtil.i("invalid display rotation : " + displayRotation);
                 }
 
                 Point disPlaySize = new Point();
@@ -458,7 +458,7 @@ public class CameraFragment extends Fragment implements View.OnClickListener,
 
                 mPreviewSize = chooseOptmalSize(map.getOutputSizes(SurfaceTexture.class),
                         rotatePreviewWidth,rotatePreviewHeight, maxPreviewWidth, maxPreviewHeight, largest);
-                LogUtil.d("mPreviewSize = " + mPreviewSize);
+                LogUtil.i("mPreviewSize = " + mPreviewSize);
 
                 // 横竖屏
                 int orientation = getResources().getConfiguration().orientation;
@@ -489,7 +489,7 @@ public class CameraFragment extends Fragment implements View.OnClickListener,
             return;
         }
         int rotation = activity.getWindowManager().getDefaultDisplay().getRotation();
-        LogUtil.d("rotation = " + rotation);
+        LogUtil.i("rotation = " + rotation);
         Matrix matrix = new Matrix();
         RectF viewRect = new RectF(0,0, viewWidth, viewHeight);
         RectF  bufferRect = new RectF(0, 0, mPreviewSize.getHeight(), mPreviewSize.getWidth());
@@ -497,7 +497,7 @@ public class CameraFragment extends Fragment implements View.OnClickListener,
         float centerY = viewRect.centerY();
 
         if(Surface.ROTATION_90 == rotation || Surface.ROTATION_270 == rotation){
-            LogUtil.d("90 | 270 ");
+            LogUtil.i("90 | 270 ");
             bufferRect.offset(centerX - bufferRect.centerX(), centerY - bufferRect.centerY());
             matrix.setRectToRect(viewRect, bufferRect, Matrix.ScaleToFit.FILL);
             float scale = Math.max(
@@ -506,10 +506,10 @@ public class CameraFragment extends Fragment implements View.OnClickListener,
             matrix.postScale(scale, scale, centerX, centerY);
             matrix.postRotate(90 * (rotation - 2), centerX, centerY);
         }else if(Surface.ROTATION_180 == rotation){
-            LogUtil.d("180");
+            LogUtil.i("180");
             matrix.postRotate(180, centerX, centerY);
         }else{
-            LogUtil.d("0");
+            LogUtil.i("0");
             bufferRect.offset(centerX - bufferRect.centerX(), centerY - bufferRect.centerY());
             matrix.setRectToRect(viewRect, bufferRect, Matrix.ScaleToFit.FILL);
             float scale = Math.max(
@@ -518,7 +518,7 @@ public class CameraFragment extends Fragment implements View.OnClickListener,
             matrix.postScale(scale, scale, centerX, centerY);
             matrix.postRotate(0, centerX, centerY);
         }
-        LogUtil.d("matix = " + matrix);
+        LogUtil.i("matix = " + matrix);
         mTextureView.setTransform(matrix);
     }
 
@@ -597,7 +597,7 @@ public class CameraFragment extends Fragment implements View.OnClickListener,
                                 setAutoFlash(mPreviewRequestBuilder);
 
                                 // set fps range
-                                mPreviewRequestBuilder.set(CaptureRequest.CONTROL_AE_TARGET_FPS_RANGE, fpsRnage[3]);
+                                //mPreviewRequestBuilder.set(CaptureRequest.CONTROL_AE_TARGET_FPS_RANGE, fpsRnage[3]);
                                 // 开启预览
                                 mPreviewRequest = mPreviewRequestBuilder.build();
                                 mCaptureSession.setRepeatingRequest(mPreviewRequest,
@@ -663,12 +663,12 @@ public class CameraFragment extends Fragment implements View.OnClickListener,
                 break;
             }
             case R.id.prop_rectify:{
-                if(propertiesProxy2.get(PROP_RECTIFY, "0").equals("3")){
-                    propertiesProxy2.set(PROP_RECTIFY,"0");
+                if(SystemProperties.getInt(PROP_RECTIFY, 3) == 3){
+                    SystemProperties.set(PROP_RECTIFY,String.valueOf(0));
                     rectifyButton.setText(R.string.prop_disable);
                     showToast("disable rectify ===========");
                 }else{
-                    propertiesProxy2.set(PROP_RECTIFY,"3");
+                    SystemProperties.set(PROP_RECTIFY,String.valueOf(3));
                     rectifyButton.setText(R.string.prop_enable);
                     showToast("enable rectify ===========");
                 }
@@ -756,7 +756,7 @@ public class CameraFragment extends Fragment implements View.OnClickListener,
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         if(requestCode == REQUEST_CAMERA_PERMISSION){
             if(grantResults.length != 1 || grantResults[0] != PackageManager.PERMISSION_GRANTED){
-                LogUtil.d("没有相关权限");
+                LogUtil.i("没有相关权限");
                 ErrorDialog.newInstance("申请相机权限").show(getChildFragmentManager(), "dialog");
             }
         }else{

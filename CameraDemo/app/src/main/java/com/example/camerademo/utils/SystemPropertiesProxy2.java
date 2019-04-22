@@ -10,10 +10,12 @@ public class SystemPropertiesProxy2 {
 
     static {
         try{
-            Class<?> S = Class.forName("android.os.Systenproperties");
+            Class<?> S = Class.forName(" android.os.Systemproperties");
             Method[] M = S.getMethods();
+            LogUtil.d("SystemProperties ---- M : " + M.toString());
             for(Method method : M){
                 String methodName = method.getName();
+                LogUtil.d("SystemProperties ---- methodName : " + methodName);
                 if(methodName.equals("get")){
                     sysPropGet = method;
                 }else if(methodName.equals("set")){
@@ -32,8 +34,10 @@ public class SystemPropertiesProxy2 {
 
     public static String get(String key, String def){
         try{
-            if(sysPropGet != null)
+            LogUtil.d("SystemProperties ---- sysPropGet : " + sysPropGet);
+            if(sysPropGet != null){
                 return (String)sysPropGet.invoke(null, key, def);
+            }
         }catch (IllegalArgumentException e){
             e.printStackTrace();
         }catch (InvocationTargetException e){
@@ -47,8 +51,10 @@ public class SystemPropertiesProxy2 {
 
     public static void set(String key, String value){
         try{
-            if(sysPropSet != null)
+            LogUtil.d("SystemProperties ---- sysPropSet : " + sysPropSet);
+            if(sysPropSet != null){
                 sysPropSet.invoke(null, key, value);
+            }
         }catch (IllegalArgumentException e){
             e.printStackTrace();
         }catch (IllegalAccessException e){
