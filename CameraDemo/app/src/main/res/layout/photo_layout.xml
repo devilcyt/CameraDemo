@@ -47,15 +47,14 @@
             android:background="@drawable/circle_photo"
             android:src="@drawable/ic_camera_black_48dp"
             />
-        <ImageButton
-            android:id="@+id/switch_mode"
+        <Button
+            android:id="@+id/selinux_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical|start"
-            android:contentDescription="video"
+            android:contentDescription="selinux"
             android:layout_marginStart="40dp"
-            android:background="@color/control_background"
-            android:src="@drawable/ic_switch_video_white_36dp"
+            android:text="selinux"
             />
     </FrameLayout>
 

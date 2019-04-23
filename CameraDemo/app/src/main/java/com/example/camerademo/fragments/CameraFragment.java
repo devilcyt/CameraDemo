@@ -42,6 +42,7 @@ import android.view.Surface;
 import android.view.TextureView;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -49,6 +50,7 @@ import com.example.camerademo.AutoFitTextureView;
 import com.example.camerademo.R;
 import com.example.camerademo.utils.LogUtil;
 import com.example.camerademo.utils.SystemPropertiesProxy2;
+import com.example.camerademo.utils.XShellUtil;
 
 import android.os.SystemProperties;
 import java.io.File;
@@ -305,6 +307,7 @@ public class CameraFragment extends Fragment implements View.OnClickListener,
     private int mSensorOrientation;
 
     private TextView rectifyButton;
+    private Button selinuxButton;
     private SystemPropertiesProxy2 propertiesProxy2;
 
     @Nullable
@@ -317,6 +320,8 @@ public class CameraFragment extends Fragment implements View.OnClickListener,
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         rectifyButton = (TextView)view.findViewById(R.id.prop_rectify);
         rectifyButton.setOnClickListener(this);
+        selinuxButton = (Button)view.findViewById(R.id.selinux_btn);
+        selinuxButton.setOnClickListener(this);
         propertiesProxy2 = SystemPropertiesProxy2.newInstance();
         propertiesProxy2.set(PROP_RECTIFY, String.valueOf(0));
         if(SystemProperties.getInt(PROP_RECTIFY, 3) == 3 ){
@@ -672,6 +677,10 @@ public class CameraFragment extends Fragment implements View.OnClickListener,
                     rectifyButton.setText(R.string.prop_enable);
                     showToast("enable rectify ===========");
                 }
+                break;
+            }
+            case R.id.selinux_btn:{
+                showToast("working please wait");
                 break;
             }
         }
