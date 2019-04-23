@@ -50,7 +50,6 @@ import com.example.camerademo.AutoFitTextureView;
 import com.example.camerademo.R;
 import com.example.camerademo.utils.LogUtil;
 import com.example.camerademo.utils.SystemPropertiesProxy2;
-import com.example.camerademo.utils.XShellUtil;
 
 import android.os.SystemProperties;
 import java.io.File;
