@@ -6,9 +6,12 @@
 #include "GLES2/gl2.h"
 #include "android/native_window_jni.h"
 #include "android/native_window.h"
+#include "EglThread.h"
 
-EglHelper *mEglHelper= NULL;
+
 ANativeWindow *aNativeWindow = NULL;
+EglThread *eglThread = NULL;
+
 
 extern "C"
 JNIEXPORT void JNICALL
@@ -17,18 +20,18 @@ Java_opengl_NativeOpengl_openGlNative(JNIEnv *env, jobject instance, jobject sur
     // TODO
 
 
-    mEglHelper = new EglHelper();
+    eglThread = new EglThread();
+
     aNativeWindow = ANativeWindow_fromSurface(env, surface);
 
-    mEglHelper->initEgl(aNativeWindow);
+    eglThread->onSurfaceCreate(aNativeWindow);
 
 
-    //opengl
-    glViewport(0,0,1080,1920);
-    glClearColor(0,0,1.0f,1.0f);
-    glClear(GL_COLOR_BUFFER_BIT);
+}extern "C"
+JNIEXPORT void JNICALL
+Java_opengl_NativeOpengl_surfaceChange(JNIEnv *env, jobject instance, jint width, jint height) {
 
-    mEglHelper->swapBuffer();
-
+    // TODO
+    eglThread->onSurfaceChange(width, height);
 
 }

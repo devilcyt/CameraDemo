@@ -11,4 +11,6 @@ public class NativeOpengl {
 
 
     public native void openGlNative(Surface surface);
+
+    public native void surfaceChange(int width, int height);
 }

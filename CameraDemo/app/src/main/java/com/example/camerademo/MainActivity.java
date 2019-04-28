@@ -7,7 +7,8 @@ import android.os.Bundle;
 import android.view.Window;
 import android.view.WindowManager;
 
-import com.example.camerademo.fragments.CameraFragment;
+import com.example.camerademo.fragments.Camera1Fragment;
+import com.example.camerademo.fragments.Camera2Fragment;
 
 
 /**
@@ -28,7 +29,7 @@ public class MainActivity extends AppCompatActivity {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         try {
-            fragmentTransaction.replace(R.id.container, CameraFragment.newInstance(),"camera_fragment");
+            fragmentTransaction.replace(R.id.container, Camera1Fragment.newInstance(),"camera_fragment");
             //fragmentTransaction.addToBackStack("camera_fragment");
             fragmentTransaction.commit();
         }catch (Exception e){

@@ -18,8 +18,7 @@ public class LogUtil {
 
     private static String createLog(String log ) {
         StringBuilder buffer = new StringBuilder();
-        buffer.append("================");
-        buffer.append(methodName);
+        buffer.append("================ : ");
         buffer.append(log);
         return buffer.toString();
     }

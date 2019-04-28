@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!-- this is top menu area -->
+    <LinearLayout
+        android:id="@+id/menu_top"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_alignParentTop="true"
+        android:layout_marginRight="10dp"
+        android:layout_marginLeft="10dp"
+        >
+
+        <Button
+            android:id="@+id/prop_rectify"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/Base.Widget.AppCompat.Button.Borderless"/>
+    </LinearLayout>
+
+    <!-- this is surfaceview -->
+    <com.example.camerademo.Camera2TextureView
+        android:id="@+id/texture_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/menu_top"
+        android:layout_above="@id/menu_bottom"
+        android:visibility="gone"
+        />
+
+    <com.example.camerademo.Camera1SurfaceView
+        android:id="@+id/surface_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/texture_view"
+        android:layout_above="@id/menu_bottom"
+        android:visibility="gone"/>
+
+
+    <!-- this is bottom menu area -->
+    <FrameLayout
+        android:id="@+id/menu_bottom"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
+        android:layout_width="match_parent"
+        android:layout_height="112dp"
+        android:background="@color/control_background"
+        android:layout_alignParentEnd="true"
+        >
+
+        <ImageButton
+            android:id="@+id/photo_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:contentDescription="photo"
+            android:background="@drawable/circle_photo"
+            android:src="@drawable/ic_camera_black_48dp"
+            />
+        <Button
+            android:id="@+id/switchcam_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical|start"
+            android:contentDescription="前后摄切换"
+            android:layout_marginStart="40dp"
+            android:text="selinux"
+            />
+    </FrameLayout>
+
+</RelativeLayout>

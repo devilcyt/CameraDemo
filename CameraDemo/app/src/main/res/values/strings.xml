@@ -3,4 +3,5 @@
 
     <string name="prop_enable">enable</string>
     <string name="prop_disable">disable</string>
+    <string name="error_permission">请打开相机权限</string>
 </resources>
