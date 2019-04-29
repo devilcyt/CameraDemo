@@ -17,7 +17,7 @@ add_library( # Sets the name of the library.
         SHARED
 
         # Provides a relative path to your source file(s).
-        egl/native-lib.cpp
+        native-lib.cpp
         egl/EglHelper.cpp
         egl/EglThread.cpp
         )

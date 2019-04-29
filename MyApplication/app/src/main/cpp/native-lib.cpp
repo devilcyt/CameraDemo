@@ -1,12 +1,12 @@
 #include <jni.h>
 #include <string>
 
-#include "EglHelper.h"
+#include "egl/EglHelper.h"
 
 #include "GLES2/gl2.h"
 #include "android/native_window_jni.h"
 #include "android/native_window.h"
-#include "EglThread.h"
+#include "egl/EglThread.h"
 
 
 ANativeWindow *aNativeWindow = NULL;
