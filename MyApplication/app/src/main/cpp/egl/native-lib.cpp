@@ -56,8 +56,6 @@ Java_opengl_NativeOpengl_openGlNative(JNIEnv *env, jobject instance, jobject sur
     eglThread->setRenderType(1);
     eglThread->onSurfaceCreate(aNativeWindow);
 
-
-
 }extern "C"
 JNIEXPORT void JNICALL
 Java_opengl_NativeOpengl_surfaceChange(JNIEnv *env, jobject instance, jint width, jint height) {
