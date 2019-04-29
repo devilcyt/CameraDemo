@@ -6,14 +6,23 @@
 
 EglThread::EglThread() {
 
+    // 初始化线程锁
+    pthread_mutex_init(&pthreadMutex, NULL);
+    pthread_cond_init(&pthreadCond, NULL);
+
+
 }
+
 
 EglThread::~EglThread() {
 
+    pthread_mutex_destroy(&pthreadMutex);
+    pthread_cond_destroy(&pthreadCond);
 }
 
+
 void *EglThreadImpl(void *context){
-    // 线程的回调函数,创建后会进行回调
+    // 线程的回调函数,创建时作为参数传入pthread_create方法
     EglThread *eglThread = static_cast<EglThread *>(context);
     if(eglThread != NULL)
     {
@@ -25,23 +34,32 @@ void *EglThreadImpl(void *context){
             if(eglThread->isCreate)
             {
                 LOGD("egltThread: call create");
-
                 eglThread->isCreate = false;
+                eglThread->onCreate(eglThread->onCreateContext);
             }
 
             if(eglThread->isChange){
                 LOGD("eglThread: call change");
                 eglThread->isChange = false;
-                glViewport(0,0,1080,1920); // 清屏 设置屏幕大小 surfaceWidth surfaceHeight
+                eglThread->onChange(eglThread->onChangeCOntext, eglThread->surfaceWidth, eglThread->surfaceHeight);
+                eglThread->isStart = true;
             }
 
             // call draw method
-            glClearColor(0,0,1.0f,1.0f);
-            glClear(GL_COLOR_BUFFER_BIT);
-            eglHelper->swapBuffer();
+            if(eglThread->isStart){
+                eglThread->onDraw(eglThread->onDrawContext);
+                eglHelper->swapBuffer();
+            }
 
-            // slepp thread
-            usleep(1000000 / 60);
+            if(eglThread->renderType == OPENGL_RENDER_AUTO){
+
+                // slepp thread
+                usleep(1000000 / 60);
+            }else if(eglThread->renderType == OPENGL_RENDER_HANDLE){
+                pthread_mutex_lock(&eglThread->pthreadMutex); // 加锁
+                pthread_cond_wait(&eglThread->pthreadCond, &eglThread->pthreadMutex); // 阻塞
+                pthread_mutex_unlock(&eglThread->pthreadMutex); // 解锁
+            }
 
             if(eglThread->isExit){ // 控制循环
                 LOGD("eglThread: call exit");
@@ -49,8 +67,8 @@ void *EglThreadImpl(void *context){
             }
         }
     }
-
 }
+
 
 void EglThread::onSurfaceCreate(EGLNativeWindowType window) {
 
@@ -64,6 +82,7 @@ void EglThread::onSurfaceCreate(EGLNativeWindowType window) {
 
 }
 
+
 void EglThread::onSurfaceChange(int width, int height) {
     isChange = true;
     surfaceWidth = width;
@@ -71,6 +90,38 @@ void EglThread::onSurfaceChange(int width, int height) {
 
 }
 
-void EglThread::onSurfaceDestroy() {
 
+void EglThread::onSurfaceDestroy() {
+    isExit = true;
+    isStart = false;
 }
+
+
+void EglThread::callBackOnCreate(EglThread::OnCreate onCreate1, void *context) {
+    this->onCreate = onCreate1;
+    this->onCreateContext = context;
+}
+
+
+void EglThread::callBackOnChange(EglThread::OnChange onChange1, void *context) {
+    this->onChange = onChange1;
+    this->onChangeCOntext = context;
+}
+
+
+void EglThread::callBackOnDraw(EglThread::OnDraw onDraw1, void *context) {
+    this->onDraw = onDraw1;
+    this->onDrawContext = context;
+}
+
+void EglThread::setRenderType(int renderType) {
+    this->renderType = renderType;
+}
+
+void EglThread::notifyRender() {
+        // 唤醒线程
+        pthread_mutex_lock(&this->pthreadMutex);
+        pthread_cond_signal(&this->pthreadCond);
+        pthread_mutex_unlock(&this->pthreadMutex);
+}
+

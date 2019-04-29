@@ -12,7 +12,8 @@
 #include "EglHelper.h"
 #include "unistd.h"
 
-
+#define OPENGL_RENDER_AUTO 1
+#define OPENGL_RENDER_HANDLE 2
 
 class EglThread {
 
@@ -23,9 +24,27 @@ public:
     bool isCreate = false;
     bool isChange = false;
     bool isExit = false;
+    bool isStart = false;
 
     int surfaceWidth;
     int surfaceHeight;
+
+    typedef void(*OnCreate)(void *);
+    OnCreate onCreate;
+    void *onCreateContext;
+
+    typedef void(*OnChange)(void *, int width, int height);
+    OnChange onChange;
+    void *onChangeCOntext;
+
+    typedef void(*OnDraw)(void *);
+    OnDraw onDraw;
+    void *onDrawContext;
+
+    // 手动 自动模式
+    int renderType = OPENGL_RENDER_AUTO;
+    pthread_mutex_t pthreadMutex; // 锁变量
+    pthread_cond_t pthreadCond; // 条件变量
 
 
 public:
@@ -36,7 +55,12 @@ public:
     void onSurfaceChange(int, int);
     void onSurfaceDestroy();
 
+    void callBackOnCreate(OnCreate onCreate1, void *context);
+    void callBackOnChange(OnChange onChange1, void *context);
+    void callBackOnDraw(OnDraw onDraw1, void *context);
 
+    void setRenderType(int);
+    void notifyRender();
 
 };
 
