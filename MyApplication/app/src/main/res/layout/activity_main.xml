@@ -11,4 +11,33 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
+    <LinearLayout
+        android:id="@+id/bottom_menu"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        >
+
+        <Button
+            android:id="@+id/triangle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="triangle"
+            />
+
+        <Button
+            android:id="@+id/quadrilateral"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="quadrilateral"
+            />
+
+        <Button
+            android:id="@+id/imgdata"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="draw image"
+            />
+    </LinearLayout>
+
 </RelativeLayout>

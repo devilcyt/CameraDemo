@@ -87,7 +87,7 @@ void EglThread::onSurfaceChange(int width, int height) {
     isChange = true;
     surfaceWidth = width;
     surfaceHeight = height;
-
+    notifyRender();
 }
 
 

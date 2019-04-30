@@ -9,6 +9,7 @@ public class OpenglSurface extends SurfaceView implements SurfaceHolder.Callback
 
     private NativeOpengl nativeOpengl;
 
+
     public OpenglSurface(Context context) {
         this(context, null);
     }
