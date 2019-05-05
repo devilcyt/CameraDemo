@@ -1,4 +1,4 @@
-package com.example.camerademo.utils;
+package com.example.camera.utils;
 
 import com.example.camerademo.BuildConfig;
 import android.util.Log;

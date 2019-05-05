@@ -1,4 +1,4 @@
-package com.example.camerademo;
+package com.example.camera;
 
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -7,8 +7,8 @@ import android.os.Bundle;
 import android.view.Window;
 import android.view.WindowManager;
 
-import com.example.camerademo.fragments.Camera1Fragment;
-import com.example.camerademo.fragments.Camera2Fragment;
+import com.example.camerademo.R;
+import com.example.camera.fragments.Camera1Fragment;
 
 
 /**

@@ -1,4 +1,4 @@
-package com.example.camerademo.utils;
+package com.example.camera.utils;
 
 import android.Manifest;
 import android.app.Activity;
@@ -10,8 +10,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
-
-import com.example.camerademo.fragments.Camera2Fragment;
 
 public class DialogUtil {
 

@@ -1,4 +1,4 @@
-package com.example.camerademo.fragments;
+package com.example.camera.fragments;
 
 import android.Manifest;
 import android.app.Activity;
@@ -25,10 +25,10 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
-import com.example.camerademo.Camera1SurfaceView;
+import com.example.camera.utils.DialogUtil;
+import com.example.camera.utils.SystemReflectionProxy;
+import com.example.camera.views.Camera1SurfaceView;
 import com.example.camerademo.R;
-import com.example.camerademo.utils.DialogUtil;
-import com.example.camerademo.utils.SystemReflectionProxy;
 
 import java.io.IOException;
 import java.util.List;

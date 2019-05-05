@@ -1,10 +1,10 @@
-package com.example.camerademo;
+package com.example.camera.views;
 
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.TextureView;
 
-import com.example.camerademo.utils.LogUtil;
+import com.example.camera.utils.LogUtil;
 
 /**
  *

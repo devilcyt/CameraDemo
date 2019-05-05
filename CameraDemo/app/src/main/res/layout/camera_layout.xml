@@ -21,7 +21,7 @@
     </LinearLayout>
 
     <!-- this is surfaceview -->
-    <com.example.camerademo.Camera2TextureView
+    <com.example.camera.views.Camera2TextureView
         android:id="@+id/texture_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -30,7 +30,7 @@
         android:visibility="gone"
         />
 
-    <com.example.camerademo.Camera1SurfaceView
+    <com.example.camera.views.Camera1SurfaceView
         android:id="@+id/surface_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

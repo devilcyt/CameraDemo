@@ -1,4 +1,4 @@
-package com.example.camerademo.fragments;
+package com.example.camera.fragments;
 
 import android.Manifest;
 import android.app.Activity;
@@ -42,11 +42,11 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
 
-import com.example.camerademo.Camera2TextureView;
+import com.example.camera.utils.DialogUtil;
+import com.example.camera.utils.SystemReflectionProxy;
+import com.example.camera.views.Camera2TextureView;
 import com.example.camerademo.R;
-import com.example.camerademo.utils.DialogUtil;
-import com.example.camerademo.utils.LogUtil;
-import com.example.camerademo.utils.SystemReflectionProxy;
+import com.example.camera.utils.LogUtil;
 
 import java.io.File;
 import java.io.FileOutputStream;
