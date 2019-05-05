@@ -117,10 +117,6 @@ void Callback_SurfaceCreate(void *context){
         glBindTexture(GL_TEXTURE_2D, 0);  // 解绑
     }
 
-
-
-
-
 }
 
 /*
@@ -147,7 +143,7 @@ void Callback_SurfaceDraw(void *context){
 
     // 绘制三角形
     glUseProgram(program);  // 使用 program 不声明后面属性参数设置都无效
-    glGenTextures(1, &textureId);
+
     /*
      *  参数说明:
      *  GLuint index : 顶点坐标变量下标
@@ -187,16 +183,23 @@ void Callback_SurfaceDraw(void *context){
 
      }
      case 5:{
-         LOGD("native draw picture");
+         LOGD("native draw picture ");
          glBindTexture(GL_TEXTURE_2D, textureId);
+
          glEnableVertexAttribArray(vPosition); // 声明顶点坐标可用
-         glEnableVertexAttribArray(fPosition); // 声明纹理坐标可用
          glVertexAttribPointer(vPosition, 2, GL_FLOAT, false, 8, vertex1);
+
+
+         glEnableVertexAttribArray(fPosition); // 声明纹理坐标可用
          glVertexAttribPointer(fPosition, 2, GL_FLOAT, false, 8, fragment1);
+
+
          glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
          glBindTexture(GL_TEXTURE_2D, 0);
          break;
      }
+         default:
+             break;
  }
 }
 
@@ -251,7 +254,7 @@ Java_opengl_NativeOpengl_imgData(JNIEnv *env, jobject instance, jint w, jint h, 
     jbyte *data = env->GetByteArrayElements(data_, NULL);
 
     // data.length 用于计算需要分配的内存空间
-
+    LOGD("Native set image data");
     width = w;  // 图片的宽
     height = h; // 图片的高
     pixels = malloc(length); // 根据lenth个pixels分配内存空间

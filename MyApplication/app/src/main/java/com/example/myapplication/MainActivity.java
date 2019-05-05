@@ -38,9 +38,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         imgdraw_btn.setOnClickListener(this);
 
 
-        Bitmap bitmap = BitmapFactory.decodeResource(getResources(),R.drawable.pciture);
+        final Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.pciture);
         ByteBuffer buffer = ByteBuffer.allocate(bitmap.getHeight() * bitmap.getWidth() * 4);
-        bitmap.copyPixelsFromBuffer(buffer);
+        bitmap.copyPixelsToBuffer(buffer);
         buffer.flip();
         byte[] imgData = buffer.array();
         nativeOpengl.imgData(bitmap.getWidth(), bitmap.getHeight(), imgData.length, imgData);
@@ -64,7 +64,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
 
             case R.id.imgdata:{
-                Log.i("swq","=== dra image");
+                Log.i("swq","=== draw image");
                 nativeOpengl.createTriangle(5);
                 break;
             }
