@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name">OfilmCamera</string>
+
+
+
+    <string name="confirm_camera_permission">当前应用没有相机权限，是否申请？</string>
+    <string name="no_permission"> 应用没有获取相机权限 </string>
+    <string name="permission_not_granted"> 相机权限申请失败 </string>
+
+    <string name="aspect_ratio">预览比例</string>
+    <string name="flash_auto">auto</string>
+    <string name="flash_on">on</string>
+    <string name="flash_off">off</string>
+    <string name="switch_camera">切换相机</string>
+    <string name="take_picture"> take picture success ! </string>
+    <string name="rectify_off">OFF</string>
+    <string name="rectify_on">ON</string>
+</resources>
