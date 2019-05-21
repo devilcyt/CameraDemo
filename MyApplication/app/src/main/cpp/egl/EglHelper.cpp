@@ -98,6 +98,7 @@ int EglHelper::swapBuffer() {
 // 8. 销毁 释放
 void EglHelper::destoryEgl() {
 
+    LOGD("EglHelper: begin destroy egl ");
     if(mEglDisplay != EGL_NO_DISPLAY){
         eglMakeCurrent(mEglDisplay, EGL_NO_SURFACE,EGL_NO_SURFACE,EGL_NO_CONTEXT);
     }
@@ -116,4 +117,5 @@ void EglHelper::destoryEgl() {
         eglTerminate(mEglDisplay);
         mEglDisplay = EGL_NO_DISPLAY;
     }
+    LOGD("EglHelper: finish destroy egl ");
 }

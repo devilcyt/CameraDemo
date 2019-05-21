@@ -5,8 +5,6 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
@@ -26,9 +24,8 @@ public class DialogUtil {
             return dialog;
         }
 
-        @NonNull
         @Override
-        public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
+        public Dialog onCreateDialog(Bundle savedInstanceState) {
             final Fragment fragment = getParentFragment();
             return new AlertDialog.Builder(getActivity())
                     .setMessage("申请相机权限")
@@ -63,9 +60,8 @@ public class DialogUtil {
             return dialog;
         }
 
-        @NonNull
         @Override
-        public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
+        public Dialog onCreateDialog(Bundle savedInstanceState) {
             final Activity activity = getActivity();
             return new AlertDialog.Builder(activity)
                     .setMessage(getArguments().getString(ARG_MESSAGE))

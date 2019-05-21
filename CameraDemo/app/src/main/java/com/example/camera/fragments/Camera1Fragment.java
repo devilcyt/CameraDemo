@@ -10,8 +10,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Message;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
@@ -42,9 +40,9 @@ public class Camera1Fragment extends Fragment implements View.OnClickListener,
 
     private Activity mActivity;
 
-    private Camera mCamera = null;
-    private Camera.Parameters mParameters;
-    private Camera.CameraInfo mCameraInfo;
+    private Camera mCamera = null;  // 相机操作类
+    private Camera.Parameters mParameters;  // 相机参数操作类
+    private Camera.CameraInfo mCameraInfo;  // 相机信息
     private int mCameraId = Camera.CameraInfo.CAMERA_FACING_FRONT;
 
     private Camera1SurfaceView mCamera1SurfaceView;
@@ -163,7 +161,7 @@ public class Camera1Fragment extends Fragment implements View.OnClickListener,
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         if(requestCode == REQUEST_PERMISSIONS_CODE){
             if(grantResults.length != 1 || grantResults[0] != PackageManager.PERMISSION_GRANTED){
                 DialogUtil.ErrorDialog.newInstance(getResources().getString(R.string.error_permission)).show(getChildFragmentManager(),"dialog");
@@ -177,9 +175,8 @@ public class Camera1Fragment extends Fragment implements View.OnClickListener,
     /**
      * 加载布局
      */
-    @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return  inflater.inflate(R.layout.camera_layout, container,false);
     }
 
@@ -187,7 +184,7 @@ public class Camera1Fragment extends Fragment implements View.OnClickListener,
      * 初始化组件和ui
      */
     @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(View view, Bundle savedInstanceState) {
 
         SystemReflectionProxy.newInstance();
 
@@ -232,7 +229,7 @@ public class Camera1Fragment extends Fragment implements View.OnClickListener,
 
 
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+    public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mActivity = getActivity();
     }
@@ -414,6 +411,8 @@ public class Camera1Fragment extends Fragment implements View.OnClickListener,
      */
     private void takePicture(){
         showToast("take picture");
+
+
     }
 
 

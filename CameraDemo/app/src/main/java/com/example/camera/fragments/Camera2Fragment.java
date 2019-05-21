@@ -26,8 +26,6 @@ import android.media.ImageReader;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.HandlerThread;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
@@ -305,14 +303,13 @@ public class Camera2Fragment extends Fragment implements View.OnClickListener,
     private Button switchCamButton;
     private SystemReflectionProxy propertiesProxy2;
 
-    @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater,ViewGroup container, Bundle savedInstanceState) {
             return inflater.inflate(R.layout.camera_layout, container, false);
     }
 
     @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(View view, Bundle savedInstanceState) {
         rectifyButton = view.findViewById(R.id.prop_rectify);
         rectifyButton.setOnClickListener(this);
         switchCamButton = view.findViewById(R.id.switchcam_btn);
@@ -334,7 +331,7 @@ public class Camera2Fragment extends Fragment implements View.OnClickListener,
     }
 
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+    public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mFile = new File(getActivity().getExternalFilesDir(null), "pic.jpg");
     }
@@ -764,7 +761,7 @@ public class Camera2Fragment extends Fragment implements View.OnClickListener,
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         if(requestCode == REQUEST_CAMERA_PERMISSION){
             if(grantResults.length != 1 || grantResults[0] != PackageManager.PERMISSION_GRANTED){
                 LogUtil.i("没有相关权限");

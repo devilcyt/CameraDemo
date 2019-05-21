@@ -20,7 +20,7 @@ public class Camera1SurfaceView extends SurfaceView {
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         int width = MeasureSpec.getSize(widthMeasureSpec);
-        int height = width / 3 * 4;
+        int height = width / 3 * 4;  // 预览大小设置为 4:3
         setMeasuredDimension(width, height);
     }
 }

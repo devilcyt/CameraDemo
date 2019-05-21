@@ -20,6 +20,10 @@ add_library( # Sets the name of the library.
         native-lib.cpp
         egl/EglHelper.cpp
         egl/EglThread.cpp
+        opengl/OpenglBase.cpp
+        opengl/OpenglController.cpp
+        opengl/OpenglFilterOne.cpp
+        opengl/OpenglFilterTwo.cpp
         )
 
 # Searches for a specified prebuilt library and stores the path as a

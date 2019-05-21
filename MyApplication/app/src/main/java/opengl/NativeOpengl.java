@@ -26,6 +26,10 @@ public class NativeOpengl {
     *   向底层传入图片data数据
      */
 
-    public native void imgData(int w, int h, int length, byte[] data);
+    public native void setimgData(int w, int h, int length, byte[] data);
+
+    public native void surfaceDestroy();
+
+    public native void surfaceChangeFilter();
 
 }
