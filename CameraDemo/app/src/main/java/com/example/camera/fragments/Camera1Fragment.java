@@ -105,7 +105,7 @@ public class Camera1Fragment extends Fragment implements View.OnClickListener,
             }
 
             case MSG_SET_PREVIEW_SIZE:{
-                Log.i(TAG, "==========  setPreviewSize");
+                Log.i(TAG, "==========  setPreviewSize pw , ph = " + message.arg1 + ", " + message.arg2);
                 int width = message.arg1;
                 int height = message.arg2;
                 setPreviewSize(width, height);
@@ -113,7 +113,7 @@ public class Camera1Fragment extends Fragment implements View.OnClickListener,
             }
 
             case MSG_SET_PICTURE_SIZE:{
-                Log.i(TAG, "==========  setPictureSize");
+                Log.i(TAG, "==========  setPictureSize piw , pih = " + message.arg1 + ", " + message.arg2)
                 int width = message.arg1;
                 int height = message.arg2;
                 setPictureSize(width,height);
@@ -203,7 +203,7 @@ public class Camera1Fragment extends Fragment implements View.OnClickListener,
                 mPreviewSurfaceHeight = height;
                 if(mCameraHandler != null){
                     mCameraHandler.obtainMessage(MSG_SET_PREVIEW_SIZE, width, height).sendToTarget();
-                    mCameraHandler.obtainMessage(MSG_SET_PICTURE_SIZE,width,height).sendToTarget();
+                    mCameraHandler.obtainMessage(MSG_SET_PICTURE_SIZE, width, height).sendToTarget();
                     mCameraHandler.obtainMessage(MSG_SET_PREVIEW_SURFACE,holder).sendToTarget();
                     mCameraHandler.sendEmptyMessage(MSG_START_PREVIEW);
                 }
@@ -343,8 +343,8 @@ public class Camera1Fragment extends Fragment implements View.OnClickListener,
                         PixelFormat.getPixelFormatInfo(previewFormat, pixelFormat);
                         int bufferSize = (frameWidth * frameHeight * pixelFormat.bitsPerPixel) / 8;
                         mCamera.addCallbackBuffer(new byte[bufferSize]);
-                        mCamera.addCallbackBuffer(new byte[bufferSize]);
-                        mCamera.addCallbackBuffer(new byte[bufferSize]);
+                        /*mCamera.addCallbackBuffer(new byte[bufferSize]);
+                        mCamera.addCallbackBuffer(new byte[bufferSize]);*/
                     }
                     mCamera.setParameters(parameters);
                     break;

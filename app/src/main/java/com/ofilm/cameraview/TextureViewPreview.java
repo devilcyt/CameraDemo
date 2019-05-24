@@ -1,5 +1,6 @@
 package com.ofilm.cameraview;
 
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.graphics.Matrix;
 import android.graphics.SurfaceTexture;
@@ -9,49 +10,52 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.ofilm.camera.R;
+import com.ofilm.utils.LogUtil;
 
-public class TextureViewPreview extends PreviewImpl {
+class TextureViewPreview extends PreviewImpl {
 
     private final TextureView mTextureView;
 
     private int mDisplayOrientation;
 
-    TextureViewPreview(Context context, ViewGroup parent){
+    TextureViewPreview(Context context, ViewGroup parent) {
         final View view = View.inflate(context, R.layout.texture_view, parent);
         mTextureView = (TextureView) view.findViewById(R.id.texture_view);
         mTextureView.setSurfaceTextureListener(new TextureView.SurfaceTextureListener() {
+
             @Override
             public void onSurfaceTextureAvailable(SurfaceTexture surface, int width, int height) {
-                setBufferSize(width, height);
+                LogUtil.d("onSurfaceTextureAvailable() ");
+                setSize(width, height);
                 configureTransform();
                 dispatchSurfaceChanged();
             }
 
             @Override
             public void onSurfaceTextureSizeChanged(SurfaceTexture surface, int width, int height) {
-                setBufferSize(width,height);
+                LogUtil.d("onSurfaceTextureSizeChanged() ");
+                setSize(width, height);
                 configureTransform();
                 dispatchSurfaceChanged();
             }
 
             @Override
             public boolean onSurfaceTextureDestroyed(SurfaceTexture surface) {
-                setBufferSize(0, 0);
+                LogUtil.d("onSurfaceTextureDestroyed() ");
+                setSize(0, 0);
                 return true;
             }
 
             @Override
             public void onSurfaceTextureUpdated(SurfaceTexture surface) {
-
             }
         });
-
     }
 
-
+    // This method is called only from Camera2.
+    @TargetApi(15)
     @Override
     public void setBufferSize(int width, int height) {
-        // 只有在使用Camera2的时候才走
         mTextureView.getSurfaceTexture().setDefaultBufferSize(width, height);
     }
 
@@ -61,7 +65,7 @@ public class TextureViewPreview extends PreviewImpl {
     }
 
     @Override
-    public Object getSurfaceTexture() {
+    public SurfaceTexture getSurfaceTexture() {
         return mTextureView.getSurfaceTexture();
     }
 
@@ -86,29 +90,32 @@ public class TextureViewPreview extends PreviewImpl {
         return mTextureView.getSurfaceTexture() != null;
     }
 
-    private void configureTransform() {
-
+    /**
+     * Configures the transform matrix for TextureView based on {@link #mDisplayOrientation} and
+     * the surface size.
+     */
+    void configureTransform() {
         Matrix matrix = new Matrix();
-
-        if(mDisplayOrientation % 180 == 90){
+        if (mDisplayOrientation % 180 == 90) {
             final int width = getWidth();
             final int height = getHeight();
-
-            // 横屏时旋转预览画面
+            // Rotate the camera preview when the screen is landscape.
             matrix.setPolyToPoly(
                     new float[]{
-                            0.f, 0.f,
-                            width, 0.f,
-                            0.f, height,
-                            width, height,
+                            0.f, 0.f, // top left
+                            width, 0.f, // top right
+                            0.f, height, // bottom left
+                            width, height, // bottom right
                     }, 0,
                     mDisplayOrientation == 90 ?
+                            // Clockwise
                             new float[]{
                                     0.f, height, // top left
                                     0.f, 0.f, // top right
                                     width, height, // bottom left
                                     width, 0.f, // bottom right
-                            } : // or mDisplayOrientation == 270
+                            } : // mDisplayOrientation == 270
+                            // Counter-clockwise
                             new float[]{
                                     width, 0.f, // top left
                                     width, height, // top right
@@ -121,4 +128,5 @@ public class TextureViewPreview extends PreviewImpl {
         }
         mTextureView.setTransform(matrix);
     }
+
 }

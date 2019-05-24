@@ -37,7 +37,14 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         app:srcCompat="@drawable/ic_camera_black_48dp"
-        app:useCompatPadding="true">
-    </android.support.design.widget.FloatingActionButton>
+        app:useCompatPadding="true"/>
 
+    <Button
+        android:id="@+id/rectify"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:text="@string/rectify_on"
+        />
 </RelativeLayout>

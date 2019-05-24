@@ -14,6 +14,8 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
+import com.ofilm.camera.R;
+
 import java.util.Arrays;
 import java.util.Set;
 
@@ -99,22 +101,25 @@ public class AspectRatioDialog extends DialogFragment {
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             AspectRatioAdapter.ViewHolder holder;
+            AspectRatio ratio = getItem(position);
+            StringBuilder sb = new StringBuilder(ratio.toString());
             if(convertView == null){
-                convertView = LayoutInflater.from(parent.getContext()).inflate(android.R.layout.simple_list_item_1,
+                convertView = LayoutInflater.from(parent.getContext()).inflate(R.layout.aspect_dialog_item,
                         parent, false);
                 holder = new AspectRatioAdapter.ViewHolder();
-                holder.text = (TextView) convertView.findViewById(android.R.id.text1);
+                holder.text = (TextView) convertView.findViewById(R.id.text1);
                 convertView.setTag(holder);
             }else{
                 holder = (AspectRatioAdapter.ViewHolder) convertView.getTag();
             }
-            AspectRatio ratio = getItem(position);
-            StringBuilder sb = new StringBuilder(ratio.toString());
             if(ratio.equals(mCurrentRatio)){
                 sb.append(" *");
             }
-            holder.text.setText(sb); // 显示
-
+            if(ratio == AspectRatio.of(4,3) || ratio == AspectRatio.of(16,9)) {
+                holder.text.setText(sb); // 显示
+            }else{
+                convertView.setVisibility(View.GONE);
+            }
             return convertView;
         }
 

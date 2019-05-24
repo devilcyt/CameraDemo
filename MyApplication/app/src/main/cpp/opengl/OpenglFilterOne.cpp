@@ -6,8 +6,6 @@
 
 OpenglFilterOne::OpenglFilterOne() {
 
-
-
 }
 
 OpenglFilterOne::~OpenglFilterOne() {
@@ -113,9 +111,10 @@ void OpenglFilterOne::draw() {
 
     switch(drawType){
         case 3:{
-            LOGD("native triangle");
+            LOGD("native triangle && vertexs = %d" ,vertexs);
             glEnableVertexAttribArray(vPosition); // 声明顶点坐标可用
             glVertexAttribPointer(vPosition, 2, GL_FLOAT, false, 8, vertexs);
+
             glDrawArrays(GL_TRIANGLE_STRIP, 0, 3);
             break;
         }
@@ -124,6 +123,7 @@ void OpenglFilterOne::draw() {
             LOGD("native quadrilateral");
             glEnableVertexAttribArray(vPosition); // 声明顶点坐标可用
             glVertexAttribPointer(vPosition, 2, GL_FLOAT, false, 8, vertexs);
+
             glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
             break;
         }

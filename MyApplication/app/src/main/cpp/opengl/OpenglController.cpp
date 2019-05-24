@@ -187,9 +187,12 @@ void OpenglController::setImageData(jint pic_width, jint pic_height, jint length
 }
 
 void OpenglController::setDrawType(int num) {
-   // draNum = num;
+    draNum = num;
     if(openglBase != NULL){
         openglBase->setDrawType(num);
+    }
+    if(num != 5 && eglThread != NULL){
+        eglThread->notifyRender();
     }
 }
 

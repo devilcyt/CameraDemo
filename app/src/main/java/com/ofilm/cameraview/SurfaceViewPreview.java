@@ -16,9 +16,9 @@ public class SurfaceViewPreview extends PreviewImpl {
     final SurfaceView mSurfaceView;
 
     SurfaceViewPreview(Context context, ViewGroup parent){
-        final View view = View.inflate(context, R.layout.surface_view, parent);
+        View view = View.inflate(context, R.layout.surface_view, parent);
         mSurfaceView = (SurfaceView) view.findViewById(R.id.surface_view);
-        final SurfaceHolder holder = mSurfaceView.getHolder();
+        SurfaceHolder holder = mSurfaceView.getHolder();
 
         holder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
         holder.addCallback(new SurfaceHolder.Callback() {
@@ -30,7 +30,7 @@ public class SurfaceViewPreview extends PreviewImpl {
             @Override
             public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
                 LogUtil.d("surfaceChanged() .");
-                setBufferSize(width, height);
+                setSize(width, height);
                 if(!ViewCompat.isInLayout(mSurfaceView)){
                     dispatchSurfaceChanged();
                 }
@@ -39,7 +39,7 @@ public class SurfaceViewPreview extends PreviewImpl {
             @Override
             public void surfaceDestroyed(SurfaceHolder holder) {
                 LogUtil.d("surfaceDestroyed() .");
-                setBufferSize(0, 0);
+                setSize(0, 0);
             }
         });
     }

@@ -18,6 +18,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.ofilm.cameraview.CameraView;
@@ -59,31 +60,39 @@ public class MainActivity extends AppCompatActivity implements
     private int mCurrentFlash;
 
     private CameraView mCameraView;
+
     private Handler mPictureTakenHandler = null; // 子线程，用于后台保存拍照图片
+
+    private Button rectify_btn;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        mCameraView = findViewById(R.id.camera_view);
+        mCameraView = (CameraView) findViewById(R.id.camera_view);
         // 设置回调
         if(mCameraView != null){
             mCameraView.addCallback(mCameraCallback);
         }
 
         // 初始化组件
-        FloatingActionButton fab = findViewById(R.id.take_picture);
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.take_picture);
         if(fab != null){
             fab.setOnClickListener(this);
         }
 
-        Toolbar tb = findViewById(R.id.toolbar);
+        Toolbar tb = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(tb);
         ActionBar actionBar = getSupportActionBar();
         if(actionBar != null){
             actionBar.setDisplayShowTitleEnabled(false); // 去掉actionbar title 显示
         }
+
+        rectify_btn = (Button) findViewById(R.id.rectify);
+        rectify_btn.setOnClickListener(this);
+        updateRectifyUi();
+
         LogUtil.d("onCreate(): finish .");
     }
 
@@ -259,7 +268,24 @@ public class MainActivity extends AppCompatActivity implements
                 break;
             }
 
+            case R.id.rectify:{
+                if(SystemReflectionProxy.getInt(Constants.PROP_RECTIFY, 3) == 3){
+                    SystemReflectionProxy.set(Constants.PROP_RECTIFY,String.valueOf(0));
+                    updateRectifyUi();
+                }else{
+                    SystemReflectionProxy.set(Constants.PROP_RECTIFY,String.valueOf(3));
+                    updateRectifyUi();
+                }
+                break;
+            }
+        }
+    }
 
+    private void updateRectifyUi(){
+        if(SystemReflectionProxy.getInt(Constants.PROP_RECTIFY, 3) == 3 ){
+            rectify_btn.setText(R.string.rectify_on);
+        }else{
+            rectify_btn.setText(R.string.rectify_off);
         }
     }
 
@@ -315,4 +341,5 @@ public class MainActivity extends AppCompatActivity implements
             });
         }
     };
+
 }

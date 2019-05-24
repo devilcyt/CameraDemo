@@ -56,6 +56,7 @@ void *EglThreadImpl(void *context){
             if(eglThread->isStart){
                 eglThread->onDraw(eglThread->onDrawContext);
                 eglHelper->swapBuffer();
+                LOGD("start swap buffer in Eglthread");
             }
             LOGD("eglThread: type = %d", eglThread->renderType);
             if(eglThread->renderType == OPENGL_RENDER_AUTO){

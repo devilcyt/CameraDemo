@@ -44,7 +44,9 @@ public abstract class PreviewImpl {
 
     public Object getSurfaceTexture(){return null;}
 
-    public void setBufferSize(int width, int height){
+    public void setBufferSize(int width, int height){}
+
+    public void setSize(int width, int height){
         mWidth = width;
         mHeight = height;
     }

@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">OflimCamera</string>
+    <string name="app_name">SimpleCamera</string>
 
     <string name="prop_enable">enable</string>
     <string name="prop_disable">disable</string>

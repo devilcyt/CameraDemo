@@ -5,7 +5,6 @@ import android.hardware.Camera;
 import android.os.Build;
 import android.support.v4.util.SparseArrayCompat;
 import android.view.SurfaceHolder;
-import android.view.View;
 
 import com.ofilm.cameraview.CameraViewImpl;
 import com.ofilm.cameraview.PreviewImpl;
@@ -70,10 +69,17 @@ public class Camera1 extends CameraViewImpl {
         preview.setCallback(new PreviewImpl.Callback() {
             @Override
             public void onSurfaceChanged() {
+                // songweiqiang fix bug begin
+                if(mCamera == null){
+                    chooseCamera();
+                    openCamera();
+                }
+                // songweiqiang fix bug end
                 if(mCamera != null){
                     LogUtil.d("onSurfaceChanged() : set preview and set parameters ------");
                     setupPreview();
                     adjustCameraParameters();
+                    mCamera.startPreview();
                 }
             }
         });
@@ -81,15 +87,22 @@ public class Camera1 extends CameraViewImpl {
 
     @Override
     public boolean start() {
-        chooseCamera();
-        openCamera();
+        // songweiqiang fix bug begin
         if(mPreview.isReady()){
             LogUtil.d("start(): begin start preview .");
+            chooseCamera();
+            openCamera();
             setupPreview();
         }
         mShowingPreview = true;
-        mCamera.startPreview(); // 开启预览
+        if(mCamera != null){
+            mCamera.startPreview(); // 解决后台唤醒时, 预览画面卡主的问题.
+        }
+        /*if(mCamera != null){
+            mCamera.startPreview(); // 开启预览
+        }*/
         LogUtil.d("start(): finish start preview .");
+        // songweiqiang fix bug end
         return true;
 
     }
@@ -130,7 +143,7 @@ public class Camera1 extends CameraViewImpl {
     public Set<AspectRatio> getSupportedAspectRatios() {
         SizeMap idealAspectRadios = mPreviewSize;
         for(AspectRatio aspectRatio : idealAspectRadios.ratios()){
-            if(mPictureSize.sizes(aspectRatio) == null){
+            if(mPictureSize.sizes(aspectRatio) == null &&(aspectRatio != AspectRatio.of(4, 3) || aspectRatio != AspectRatio.of(16,9))){
                 idealAspectRadios.remove(aspectRatio); // 剔除预览比例与拍照比例不一致的选项
             }
         }
@@ -244,7 +257,7 @@ public class Camera1 extends CameraViewImpl {
         if(isCameraOpened()){
             mCameraParameters.setRotation(calcCameraRotation(displayOrientation));
             mCamera.setParameters(mCameraParameters);
-            final boolean needToStopPreview = mShowingPreview /*&& Build.VERSION.SDK_INT < 14*/;
+            final boolean needToStopPreview = mShowingPreview && Build.VERSION.SDK_INT < 14;
             if(needToStopPreview){
                 mCamera.stopPreview();
             }
@@ -260,12 +273,11 @@ public class Camera1 extends CameraViewImpl {
         if(mCamera != null){
             releseCamera();
         }
-        /*mCamera = SystemReflectionProxy.openCameraLegacy(mCameraId, SystemReflectionProxy.HAL_VERSION_1);*/
-        mCamera = Camera.open(mCameraId);
-        mCamera.setErrorCallback(errorCallback);
         LogUtil.d("open camera with id = " + mCameraId + ", mCamera = " + mCamera + ", mDisplayOrientation = " + calcDisplayOrientation(mDisplayOrientation));
+        mCamera = SystemReflectionProxy.openCameraLegacy(mCameraId, SystemReflectionProxy.HAL_VERSION_1);
+        //mCamera = Camera.open(mCameraId);
+        mCamera.setErrorCallback(errorCallback);
         mCameraParameters = mCamera.getParameters();
-
         // preview size
         mPreviewSize.clear();
         for(Camera.Size size : mCameraParameters.getSupportedPreviewSizes()){
@@ -284,7 +296,7 @@ public class Camera1 extends CameraViewImpl {
         }
 
         adjustCameraParameters();
-        mCamera.setDisplayOrientation(calcDisplayOrientation(mDisplayOrientation));
+        mCamera.setDisplayOrientation(90/*calcDisplayOrientation(mDisplayOrientation)*/);
         mCallback.onCameraOpened();
     }
 
@@ -293,6 +305,9 @@ public class Camera1 extends CameraViewImpl {
         public void onError(int error, Camera camera) {
             switch (error){
                 case Camera.CAMERA_ERROR_SERVER_DIED:{
+                    // songweiqiang fix bug
+                    stop();
+                    start();
                     LogUtil.d("camera server died");
                     break;
                 }
@@ -331,6 +346,7 @@ public class Camera1 extends CameraViewImpl {
             Camera.getCameraInfo(i, mCameraInfo);
             if(mCameraInfo.facing == mFacing){
                 mCameraId = i;
+                LogUtil.d("chooseCamera(): camera id " + mCameraId + " info is :" + mCameraInfo);
                 return;
             }
         }
@@ -341,7 +357,7 @@ public class Camera1 extends CameraViewImpl {
         try{
             if(mPreview.getOutputClass() == SurfaceHolder.class){
                 LogUtil.d("set preview when using SurfaceView .");
-                final boolean needsToStopPreview = mShowingPreview /*&& Build.VERSION.SDK_INT < 14*/;
+                final boolean needsToStopPreview = mShowingPreview && Build.VERSION.SDK_INT < 14;
                 if(needsToStopPreview){
                     mCamera.stopPreview();
                 }
@@ -371,8 +387,10 @@ public class Camera1 extends CameraViewImpl {
         if(mShowingPreview){
             mCamera.stopPreview();
         }
-        mCameraParameters.setPreviewSize(size.getWidth(), size.getHeight());
+        mCameraParameters.setPreviewSize(size.getWidth(), size.getHeight()/*1440, 1080*/);
+        LogUtil.d("preview size  = ( " + size.getWidth() + size.getHeight() + ")");
         mCameraParameters.setPictureSize(pictureSize.getWidth(), pictureSize.getHeight());
+        LogUtil.d("picture size  = ( " + pictureSize.getWidth() + pictureSize.getHeight() + ")");
         // setRotation() 设置拍照图片的旋转方向,影响的是JPeg的那个PictureCallback
         // 很多时候只是修改这里返回的exif信息，不会真的旋转图像数据
         mCameraParameters.setRotation(calcCameraRotation(mDisplayOrientation));
@@ -382,8 +400,10 @@ public class Camera1 extends CameraViewImpl {
         // 设置闪光灯
         setFlashInternal(mFlash);
 
+        LogUtil.d("here set parameters .");
         mCamera.setParameters(mCameraParameters);
         if(mShowingPreview){
+            LogUtil.d("here start preview .");
             mCamera.startPreview();
         }
 
@@ -447,6 +467,7 @@ public class Camera1 extends CameraViewImpl {
 
     private Size chooseOptimalSize(SortedSet<Size> sizes) {
         if(!mPreview.isReady()){
+            LogUtil.d("?????????");
             return sizes.first(); // 返回最小的一个size
         }
         int desiredWidth;
@@ -463,6 +484,7 @@ public class Camera1 extends CameraViewImpl {
         }
         Size result = null;
         for(Size size : sizes){
+            LogUtil.d("w , h = " + size.getWidth() + size.getHeight() + "dw , dh = " + desiredWidth +  desiredHeight);
             if(desiredWidth <= size.getWidth() && desiredHeight <= size.getHeight()){
                 return size;
             }

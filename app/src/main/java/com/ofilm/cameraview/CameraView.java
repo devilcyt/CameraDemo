@@ -92,7 +92,6 @@ public class CameraView extends FrameLayout {
         // 获取渲染视图 { surfaceview, textureview }
         final PreviewImpl preview = createPreviewImpl(context);
         mCallbacks = new CallbackBridge();
-
         // 根据sdk 使用不同的camera api
         if(/*Build.VERSION.SDK_INT < 21*/true){
             mImpl = new Camera1(mCallbacks, preview);
@@ -336,7 +335,7 @@ public class CameraView extends FrameLayout {
     private PreviewImpl createPreviewImpl(Context context){
 
         PreviewImpl preview;
-        if(true){
+        if(Build.VERSION.SDK_INT < 14){
             preview = new SurfaceViewPreview(context, this);
         }else{
             preview = new TextureViewPreview(context, this);

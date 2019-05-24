@@ -62,16 +62,14 @@ public class SystemReflectionProxy {
 
     public static Camera openCameraLegacy(int cameraId, int halVersion){
         try {
-            LogUtil.d("proxy : open camera legacy .");
             if(openCamera != null){
-                return (Camera)openCamera.invoke(null, cameraId, halVersion);
-            }else {
-                LogUtil.d("native invoke openCamera failed .");
+                LogUtil.d("proxy : open camera legacy  with hal version 1.");
+                return (android.hardware.Camera)openCamera.invoke(null, cameraId, halVersion);
             }
-        }catch (IllegalAccessException e){
+        }catch (Exception e){
             e.printStackTrace();
-        }catch (InvocationTargetException e){
-            e.printStackTrace();
+            LogUtil.d("proxy : open camera with hal version default .");
+            return android.hardware.Camera.open(cameraId); // 如果反射获取失败, 用这个方法代替。
         }
         return null;
     }

@@ -26,7 +26,7 @@ OpenglBase::OpenglBase() {
             1,1
     };
     memcpy(fragments, f, sizeof(f));
-
+    LOGD("intilize vertexs & fragments success");
 }
 
 OpenglBase::~OpenglBase() {

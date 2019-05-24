@@ -21,7 +21,7 @@ public:
     ANativeWindow *aNativeWindow = NULL;
     OpenglBase *openglBase = NULL;
 
-    //int draNum;
+    int draNum;
 
     // Begin 作为中转站，目的是传给 OpenglBase 的子类使用
     int picture_width;

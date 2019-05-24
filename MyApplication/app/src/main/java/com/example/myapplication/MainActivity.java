@@ -40,11 +40,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private int index = -1;
 
+    private boolean isInit;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Log.i("swq","111111111");
+        Log.i("swq","begin onCreate() .");
         nativeOpengl = new NativeOpengl();
         openglSurface = findViewById(R.id.surface);
         triangle_btn = findViewById(R.id.triangle);
@@ -58,14 +60,21 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         filter_btn.setOnClickListener(this);
 
         setImageList(); // 添加图片
-        Log.i("swq","2222222");
+        Log.i("swq","action 2 .");
         openglSurface.setOnSurfaceListener(new OpenglSurface.OnSurfaceListener() {
             @Override
             public void init() {
-                Log.i("swq","3333333");
-                //setImageToNative();
+                Log.i("swq","action 3 .");
+                isInit = true;
+                setImageToNative();
             }
         });
+    }
+
+    @Override
+    protected void onResume() {
+        isInit = false;
+        super.onResume();
     }
 
     @Override
@@ -116,7 +125,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void setImageToNative(){
-        final Bitmap bitmap = BitmapFactory.decodeResource(getResources(), getImageIds());
+        // 解决渲染图片直接跳到第二张 和 第一次进入应用绘制三角形和四边形失败 的问题
+        final Bitmap bitmap = BitmapFactory.decodeResource(getResources(), isInit ? imgList.get(0) : getImageIds());
         Log.i("==== index =  ", String.valueOf(index));
         ByteBuffer buffer = ByteBuffer.allocate(bitmap.getHeight() * bitmap.getWidth() * 4);
         bitmap.copyPixelsToBuffer(buffer);
