@@ -67,13 +67,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 Log.i("swq","action 3 .");
                 isInit = true;
                 setImageToNative();
+                isInit = false;
             }
         });
     }
 
     @Override
     protected void onResume() {
-        isInit = false;
         super.onResume();
     }
 

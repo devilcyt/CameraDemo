@@ -185,8 +185,6 @@ void OpenglFilterTwo::setImageByte(jint w, jint h, void *data) {
         LOGD("setMatrix 2");
         setMatrix(surface_width, surface_height, pic_width, pic_height);
     }
-
-
 }
 
 void OpenglFilterTwo::setDrawType(int num) {
